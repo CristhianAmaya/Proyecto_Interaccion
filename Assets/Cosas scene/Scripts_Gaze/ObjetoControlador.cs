@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class ObjetoControlador : MonoBehaviour
@@ -16,19 +17,45 @@ public class ObjetoControlador : MonoBehaviour
     private float scaleSize = 0.025f;
     private float holdDuration = 10f; // Duración en segundos que el objeto se mantiene frente a la cámara
 
-    private Vector3 originalPosition; // Almacena la posición original del objeto
+    private Vector3 originalPosition;// Almacena la posición original del objeto
+    private Quaternion originalRotation;
+    private Vector3 originalPositionSet;
 
     private void Start()
     {
         GazeManager.Instance.OnGazeSelection += GazeSelection;
-        originalPosition = _gazedAtObject.transform.position; // Guarda la posición original al inicio
+        UnityEngine.Debug.Log("Posicion Original 0" + originalPosition);
+        UnityEngine.Debug.Log(originalPositionSet);
+        
+    }
+    private void posicionOriginal()
+    {
+        if (_gazedAtObject != null)
+        {       
+                originalRotation = _gazedAtObject.transform.rotation;
+                originalPosition = _gazedAtObject.transform.position; // Guarda la posición original al inicio
+                UnityEngine.Debug.Log("Posicion Original Cambiada" + originalPosition);
+
+            /*if (originalPosition == originalPositionSet)
+            {
+            }*/
+        }
+        else
+        {
+            UnityEngine.Debug.Log("Objeto no seleccionado AUN");
+        }
+
     }
 
     private void GazeSelection()
     {
+        posicionOriginal();
+
         if (_gazedAtObject != null && _gazedAtObject.CompareTag(interactableTag))
         {
+
             StartCoroutine(MoveObjectWithCamera(_gazedAtObject));
+
         }
         else
         {
@@ -60,6 +87,8 @@ public class ObjetoControlador : MonoBehaviour
         if(timer >= 10f)
         {
             obj.transform.position = originalPosition;
+            obj.transform.rotation = originalRotation;
+
         }      
         
         // Verifica si el objeto aún existe antes de realizar cualquier acción adicional

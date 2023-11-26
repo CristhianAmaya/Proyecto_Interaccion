@@ -6,7 +6,7 @@ using System.Linq;
 public class WhiteboardMarker : MonoBehaviour
 {
     [SerializeField] private Transform _tip;
-    [SerializeField] private int _penSize;
+    [SerializeField] public int _penSize;
 
     private Renderer _renderer;
     private Color[] _colors;
@@ -32,7 +32,7 @@ public class WhiteboardMarker : MonoBehaviour
             return;
         }
 
-        _penSize = 5;
+        //_penSize = 5;
 
         Debug.Log(_renderer.material.color);
 
